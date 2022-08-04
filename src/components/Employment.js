@@ -4,16 +4,14 @@ class Employment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: '',
-      lastName: '',
-      occupation: '',
-      addressLine1: '',
-      addressLine2: '',
-      town: '',
-      state: '',
-      zipCode: '',
-      phone: '',
-      email: '',
+      employment: [ {
+        id: 0,
+        company: '',
+        role: '',
+        startDate: '',
+        endDate: '',
+        details: ''
+    }],
       }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,10 +19,19 @@ class Employment extends Component {
   }
 
   handleChange(event) {
-    this.setState(
-      {[event.target.name]: event.target.value}
-    );  
-  }
+    let stateSnapshot = this.state
+    const newState = stateSnapshot.employment.map(obj => {
+      // 👇️ if id equals 0, update that element of array
+      if(obj.id === 0) {
+          return {...obj, [event.target.name]: event.target.value};
+      } else {
+        return obj;
+      }});
+
+    this.setState(newState);
+    console.log(this.state);
+  };
+  
   handleSubmit(event) {
     this.props.saveData(this.state);
     event.preventDefault();
@@ -43,46 +50,26 @@ class Employment extends Component {
       <div className="flex-row">
         <div>
           <label>
-            First Name: 
-            <input type="text" name="firstName" value={this.state.firstName} onChange={this.handleChange} />        
+            Company: 
+            <input type="text" name="company" value={this.state.employment.company} onChange={this.handleChange} />        
           </label>
           <label>
-            Last Name: 
-            <input type="text" name="lastName" value={this.state.lastName} onChange={this.handleChange} />        
+            Role: 
+            <input type="text" name="role" value={this.state.employment.role} onChange={this.handleChange} />        
           </label>
           <label>
-            Occupation: 
-            <input type="text" name="occupation" value={this.state.occupation} onChange={this.handleChange} />        
+            Start Date: 
+            <input type="date" name="startDate" value={this.state.employment.startDate} onChange={this.handleChange} />        
           </label>
         </div>
         <div>
           <label>
-            Address Line 1: 
-            <input type="text" name="addressLine1" value={this.state.addressLine1} onChange={this.handleChange} />        
+            End Date: 
+            <input type="date" name="endDate" value={this.state.employment.endDate} onChange={this.handleChange} />        
           </label>
           <label>
-            Address Line 2: 
-            <input type="text" name="addressLine2" value={this.state.addressLine2} onChange={this.handleChange} />        
-          </label>
-          <label>
-            Town/City: 
-            <input type="text" name="town" value={this.state.town} onChange={this.handleChange} />        
-          </label>
-          <label>
-            State: 
-            <input type="text" name="state" value={this.state.state} onChange={this.handleChange} />        
-          </label>
-          <label>
-            Zip Code: 
-            <input type="text" name="zipCode" value={this.state.zipCode} onChange={this.handleChange} />        
-          </label>
-          <label>
-            Phone Number: 
-            <input type="text" name="phone" value={this.state.phone} onChange={this.handleChange} />        
-          </label>
-          <label>
-            Email Address: 
-            <input type="text" name="email" value={this.state.email} onChange={this.handleChange} />        
+            Details: 
+            <textarea type="text" name="details" value={this.state.employment.details} onChange={this.handleChange} />        
           </label>
         </div>
       </div>    
