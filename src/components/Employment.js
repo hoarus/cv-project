@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class General extends Component {
+class Employment extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,6 +17,7 @@ class General extends Component {
       }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.previousPage = this.previousPage.bind(this);
   }
 
   handleChange(event) {
@@ -25,9 +26,12 @@ class General extends Component {
     );  
   }
   handleSubmit(event) {
-    // console.log(this.state);
     this.props.saveData(this.state);
     event.preventDefault();
+  }
+
+  previousPage() {
+    this.props.previousPage();
   }
 
 
@@ -35,7 +39,7 @@ class General extends Component {
   render(){
     return (
       <form onSubmit={this.handleSubmit}> 
-      <h2> General Details </h2>
+      <h2> Employment Details </h2>
       <div className="flex-row">
         <div>
           <label>
@@ -83,11 +87,13 @@ class General extends Component {
         </div>
       </div>    
       <input className="formSubmit" type="submit" value="Next" />
+      <button onClick= {this.previousPage} className="formSubmit">Previous</button>
+      {/* Need to add a button which goes backwards */}
     </form>
     );
   }
 }
 
-export default General;
+export default Employment;
 
 
