@@ -26,6 +26,7 @@ class Employment extends Component {
       if(obj.id === ID) {
           return {...obj, [event.target.name]: event.target.value};
       } else {
+        return {obj}
       }});
     console.log(updatedEntries);
     let newState = {employment : updatedEntries}
@@ -65,14 +66,19 @@ class Employment extends Component {
     let ID = 0;
     let employmentEntries = this.state.employment
     let entriesFormatted = employmentEntries.map((entry)  => 
-      <p>{entry.company}</p>
+      <div>
+        <p><strong>Company:</strong> {entry.company}</p>
+        <p><strong>Role: </strong> {entry.role}</p>
+        <p><strong>Start Date:</strong> {entry.startDate}</p>
+        <p><strong>End Date:</strong> {entry.endDate}</p>
+        <p><strong>Details:</strong> {entry.details}</p>
+      </div>
     )
   
     return (
       <Fragment>
         <form onSubmit={this.handleSubmit}> 
         <h2> Employment Details </h2>
-        <p>{entriesFormatted}</p>
         <div className="flex-row">
           <div>
             <label>
@@ -81,27 +87,28 @@ class Employment extends Component {
             </label>
             <label>
               Role: 
-              <input type="text" name="role" value={this.state.employment.role} onChange={this.handleChange} />        
+              <input type="text" name="role" value={this.state.employment[ID].role} onChange={(e) => this.handleChange(e, ID)}  />        
             </label>
             <label>
               Start Date: 
-              <input type="date" name="startDate" value={this.state.employment.startDate} onChange={this.handleChange} />        
+              <input type="date" name="startDate" value={this.state.employment[ID].startDate} onChange={(e) => this.handleChange(e, ID)} />        
             </label>
           </div>
           <div>
             <label>
               End Date: 
-              <input type="date" name="endDate" value={this.state.employment.endDate} onChange={this.handleChange} />        
+              <input type="date" name="endDate" value={this.state.employment[ID].endDate} onChange={(e) => this.handleChange(e, ID)}/>        
             </label>
             <label>
               Details: 
-              <textarea type="text" name="details" value={this.state.employment.details} onChange={this.handleChange} />        
+              <textarea type="text" name="details" value={this.state.employment[ID].details} onChange={(e) => this.handleChange(e, ID)} />        
             </label>
           </div>
         </div>    
         <input className="formSubmit" type="submit" value="Update" />
       </form>
       <form onSubmit={this.handleSubmit}> 
+        <p>{entriesFormatted}</p>
         <button onClick= {this.previousPage} className="formSubmit">Previous</button>
         <button onClick= {this.addEmploymentEntry} className="formSubmit">Add Additional Employment Entry</button>
       </form>
