@@ -19,21 +19,24 @@ class Employment extends Component {
     this.addEmploymentEntry = this.addEmploymentEntry.bind(this);
   }
 
-  handleChange(event) {
+  handleChange(event, ID) {
     let employmentEntries = this.state.employment
-    const newState = employmentEntries.map(obj => {
-      // 👇️ if id equals 0, update that element of array
-      if(obj.id === 0) {
+    const updatedEntries = employmentEntries.map(obj => {
+      // 👇️ if object id matches ID passed, update that value
+      if(obj.id === ID) {
           return {...obj, [event.target.name]: event.target.value};
       } else {
-        return obj;
       }});
+    console.log(updatedEntries);
+    let newState = {employment : updatedEntries}
     this.setState(newState);
   };
   
   handleSubmit(event) {
     this.props.saveData(this.state);
     event.preventDefault();
+ 
+
   }
 
   previousPage() {
@@ -54,19 +57,27 @@ class Employment extends Component {
     this.setState(newState);
   }
 
+ 
 
 
 
   render(){
+    let ID = 0;
+    let employmentEntries = this.state.employment
+    let entriesFormatted = employmentEntries.map((entry)  => 
+      <p>{entry.company}</p>
+    )
+  
     return (
       <Fragment>
         <form onSubmit={this.handleSubmit}> 
         <h2> Employment Details </h2>
+        <p>{entriesFormatted}</p>
         <div className="flex-row">
           <div>
             <label>
               Company: 
-              <input type="text" name="company" value={this.state.employment.company} onChange={this.handleChange} />        
+              <input type="text" name="company" value={this.state.employment[ID].company} onChange={(e) => this.handleChange(e, ID)} />        
             </label>
             <label>
               Role: 
@@ -100,5 +111,3 @@ class Employment extends Component {
 }
 
 export default Employment;
-
-
