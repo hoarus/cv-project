@@ -4,14 +4,14 @@ class Employment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      employment: [ {
+      current: {
         id: 0,
         company: '',
         role: '',
         startDate: '',
         endDate: '',
-        details: ''
-    }],
+        details: ''},
+      entries : []
       }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -19,17 +19,12 @@ class Employment extends Component {
     this.addEmploymentEntry = this.addEmploymentEntry.bind(this);
   }
 
-  handleChange(event, ID) {
-    let employmentEntries = this.state.employment
-    const updatedEntries = employmentEntries.map(obj => {
-      // 👇️ if object id matches ID passed, update that value
-      if(obj.id === ID) {
-          return {...obj, [event.target.name]: event.target.value};
-      } else {
-        return {obj}
-      }});
-    console.log(updatedEntries);
-    let newState = {employment : updatedEntries}
+  handleChange(event) {
+    const updatedEntry = {...this.state.current, [event.target.name]: event.target.value};
+    console.log(updatedEntry);
+    let newState = {...this.state,
+      current: updatedEntry
+    }
     this.setState(newState);
   };
   
@@ -45,7 +40,7 @@ class Employment extends Component {
   }
 
   addEmploymentEntry(){
-    let employmentEntries = this.state.employment
+    let employmentEntries = this.state.entries
     let entryID = employmentEntries.length;
     let newEntry = {
       id: entryID,
@@ -64,7 +59,7 @@ class Employment extends Component {
 
   render(){
     let ID = 0;
-    let employmentEntries = this.state.employment
+    let employmentEntries = this.state.entries
     let entriesFormatted = employmentEntries.map((entry)  => 
       <div>
         <p><strong>Company:</strong> {entry.company}</p>
@@ -83,25 +78,25 @@ class Employment extends Component {
           <div>
             <label>
               Company: 
-              <input type="text" name="company" value={this.state.employment[ID].company} onChange={(e) => this.handleChange(e, ID)} />        
+              <input type="text" name="company" value={this.state.current.company} onChange={(e) => this.handleChange(e)} />        
             </label>
             <label>
               Role: 
-              <input type="text" name="role" value={this.state.employment[ID].role} onChange={(e) => this.handleChange(e, ID)}  />        
+              <input type="text" name="role" value={this.state.current.role} onChange={(e) => this.handleChange(e)}   />        
             </label>
             <label>
               Start Date: 
-              <input type="date" name="startDate" value={this.state.employment[ID].startDate} onChange={(e) => this.handleChange(e, ID)} />        
+              <input type="date" name="startDate"  value={this.state.current.startDate} onChange={(e) => this.handleChange(e)}  />        
             </label>
           </div>
           <div>
             <label>
               End Date: 
-              <input type="date" name="endDate" value={this.state.employment[ID].endDate} onChange={(e) => this.handleChange(e, ID)}/>        
+              <input type="date" name="endDate"  value={this.state.current.endDate} onChange={(e) => this.handleChange(e)} />        
             </label>
             <label>
               Details: 
-              <textarea type="text" name="details" value={this.state.employment[ID].details} onChange={(e) => this.handleChange(e, ID)} />        
+              <textarea type="text" name="details"  value={this.state.current.details} onChange={(e) => this.handleChange(e)} />        
             </label>
           </div>
         </div>    
@@ -118,3 +113,6 @@ class Employment extends Component {
 }
 
 export default Employment;
+
+// Next Steps - Save the being-edited company separately in State
+// When you press "Update", add that company to state
