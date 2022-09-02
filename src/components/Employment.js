@@ -29,6 +29,10 @@ class Employment extends Component {
   };
   
   handleSubmit(event) {
+    let newState = {...this.state,
+      entries: this.state.entries.concat(this.state.current)
+    }
+    this.setState(newState);
     this.props.saveData(this.state);
     event.preventDefault();
  
@@ -58,15 +62,15 @@ class Employment extends Component {
 
 
   render(){
-    let ID = 0;
+    // let ID = 0;
     let employmentEntries = this.state.entries
     let entriesFormatted = employmentEntries.map((entry)  => 
-      <div>
-        <p><strong>Company:</strong> {entry.company}</p>
-        <p><strong>Role: </strong> {entry.role}</p>
-        <p><strong>Start Date:</strong> {entry.startDate}</p>
-        <p><strong>End Date:</strong> {entry.endDate}</p>
-        <p><strong>Details:</strong> {entry.details}</p>
+      <div key={entry.id}>
+        <p key={entry.id.toString().concat(".1")}><strong>Company:</strong> {entry.company}</p>
+        <p key={entry.id.toString().concat(".2")}><strong>Role: </strong> {entry.role}</p>
+        <p key={entry.id.toString().concat(".3")}><strong>Start Date:</strong> {entry.startDate}</p>
+        <p key={entry.id.toString().concat(".4")}><strong>End Date:</strong> {entry.endDate}</p>
+        <p key={entry.id.toString().concat(".5")}><strong>Details:</strong> {entry.details}</p>
       </div>
     )
   
@@ -100,10 +104,10 @@ class Employment extends Component {
             </label>
           </div>
         </div>    
-        <input className="formSubmit" type="submit" value="Update" />
+        <input className="formSubmit" type="submit" value="Save" />
       </form>
       <form onSubmit={this.handleSubmit}> 
-        <p>{entriesFormatted}</p>
+        <div>{entriesFormatted}</div>
         <button onClick= {this.previousPage} className="formSubmit">Previous</button>
         <button onClick= {this.addEmploymentEntry} className="formSubmit">Add Additional Employment Entry</button>
       </form>
