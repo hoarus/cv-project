@@ -17,13 +17,22 @@ class App extends Component {
         state: '',
         zipCode: '',
         phone: '',
-        email: '',
-      }
-    };
+        email: ''},
+      employment: {    
+        current: {
+          id: 0,
+          company: '',
+          role: '',
+          startDate: '',
+          endDate: '',
+          details: ''},
+        entries : []}
+      };
     this.receiveGeneralData = this.receiveGeneralData.bind(this);
     this.CurrentPage = this.CurrentPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
     this.nextPage = this.nextPage.bind(this);
+    this.addEmploymentEntry = this.addEmploymentEntry.bind(this);
   }
 
 
@@ -52,19 +61,49 @@ class App extends Component {
 
   receiveEmploymentData = (childData) =>{
     this.setState({
-      general: {
-        firstName: childData.firstName,
-        lastName: childData.lastName,
-        occupation: childData.occupation,
-        addressLine1: childData.addressLine1,
-        addressLine2: childData.addressLine2,
-        town: childData.town,
-        state: childData.state,
-        zipCode: childData.zipCode,
-        phone: childData.phone,
-        email: childData.email,
-      },
+      employment: childData,
     });
+  }
+
+  receiveEmploymentCurrent = (key, value) => {
+    const updatedEntry = {...this.state.employment.current, [key]: value};
+    let newState = {...this.state,
+      employment: {...this.state.employment, current: updatedEntry }
+    }
+    this.setState(newState);
+  }
+
+  addEmploymentEntry = () => {
+    let entries = this.state.employment.entries
+    let entryID = this.nextID(entries);
+    let newEntry = {
+      id: entryID,
+      company: '',
+      role: '',
+      startDate: '',
+      endDate: '',
+      details: ''}
+    let updatedEntries = entries.concat(this.state.employment.current)
+    let newState = {...this.state, 
+      employment: {entries: updatedEntries, current: newEntry}}
+    this.setState(newState);
+  }
+
+  nextID(entries) {
+    if (entries.length === 0) {
+      return 1;
+    } else {
+      let lastEntry = entries.slice(-1)
+      return lastEntry.id +1;
+    }
+  }
+
+  receiveEmploymentEntries = (entries, newID) => {
+    let newState = {...this.state,
+      employment: {...this.state.employment, entries: entries }
+    }
+    this.setState(newState);
+    console.log(this.state.employment)
   }
 
 
@@ -74,7 +113,8 @@ class App extends Component {
       case 0:
         return <General nextPage = { this.nextPage } saveRealTime = {this.receiveGeneralData} general = { this.state.general } ></General>;
       case 1:
-        return <Employment saveData = { this.receiveEmploymentData } previousPage = { this.previousPage }></Employment>;
+        return <Employment saveData = { this.addEmploymentEntry } saveRealTime = { this.receiveEmploymentCurrent }
+         previousPage = { this.previousPage } employment = {this.state.employment} ></Employment>;
       default:
         return <General saveData = { this.receiveGeneralData }></General>;
     }
