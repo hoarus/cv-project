@@ -23,31 +23,29 @@ class App extends Component {
     this.receiveGeneralData = this.receiveGeneralData.bind(this);
     this.CurrentPage = this.CurrentPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
+    this.nextPage = this.nextPage.bind(this);
   }
 
-  receiveGeneralData = (childData) =>{
-    this.setState({
-      general: {
-        firstName: childData.firstName,
-        lastName: childData.lastName,
-        occupation: childData.occupation,
-        addressLine1: childData.addressLine1,
-        addressLine2: childData.addressLine2,
-        town: childData.town,
-        state: childData.state,
-        zipCode: childData.zipCode,
-        phone: childData.phone,
-        email: childData.email,
-      },
-    });
-    this.setState((state) => ({
-      currentPage: state.currentPage + 1
-    }));
+
+  // Method to receive general data in real time
+
+  receiveGeneralData = (key, value) => {
+    const updatedEntry = {...this.state.general, [key]: value};
+    let newState = {...this.state,
+      general: updatedEntry
+    }
+    this.setState(newState);
   }
 
   previousPage = () => {
     this.setState((state) => ({
       currentPage: state.currentPage - 1
+    }));
+  }
+
+  nextPage = () => {
+    this.setState((state) => ({
+      currentPage: state.currentPage + 1
     }));
   }
 
@@ -74,7 +72,7 @@ class App extends Component {
    CurrentPage = () => {
     switch(this.state.currentPage) {
       case 0:
-        return <General saveData = { this.receiveGeneralData }></General>;
+        return <General nextPage = { this.nextPage } saveRealTime = {this.receiveGeneralData} general = { this.state.general } ></General>;
       case 1:
         return <Employment saveData = { this.receiveEmploymentData } previousPage = { this.previousPage }></Employment>;
       default:
@@ -86,6 +84,7 @@ class App extends Component {
     return (
       <div className="App">
         <h1> CV Builder </h1>
+        <h2> {this.state.currentPage} </h2>
         <this.CurrentPage/>
       </div>
     );

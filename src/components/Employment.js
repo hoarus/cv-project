@@ -16,7 +16,7 @@ class Employment extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.previousPage = this.previousPage.bind(this);
-    this.addEmploymentEntry = this.addEmploymentEntry.bind(this);
+    this.addEntry = this.addEntry.bind(this);
   }
 
   handleChange(event) {
@@ -29,23 +29,19 @@ class Employment extends Component {
   };
   
   handleSubmit(event) {
-    let newState = {...this.state,
-      entries: this.state.entries.concat(this.state.current)
-    }
-    this.setState(newState);
+    this.addEntry();
     this.props.saveData(this.state);
     event.preventDefault();
- 
-
   }
 
   previousPage() {
     this.props.previousPage();
   }
 
-  addEmploymentEntry(){
-    let employmentEntries = this.state.entries
-    let entryID = employmentEntries.length;
+
+  addEntry(){
+    let entries = this.state.entries
+    let entryID = this.nextID(entries);
     let newEntry = {
       id: entryID,
       company: '',
@@ -53,8 +49,19 @@ class Employment extends Component {
       startDate: '',
       endDate: '',
       details: ''}
-    let newState = [...employmentEntries, newEntry];
+    let newState = { current: newEntry,
+      entries: this.state.entries.concat(this.state.current)
+    }
     this.setState(newState);
+  }
+
+  nextID(entries) {
+    if (entries.length === 0) {
+      return 1;
+    } else {
+      let lastEntry = entries.slice(-1)
+      return lastEntry.id +1;
+    }
   }
 
  
@@ -77,7 +84,7 @@ class Employment extends Component {
     return (
       <Fragment>
         <form onSubmit={this.handleSubmit}> 
-        <h2> Employment Details </h2>
+        <h2> Add Employment Details </h2>
         <div className="flex-row">
           <div>
             <label>
@@ -107,9 +114,10 @@ class Employment extends Component {
         <input className="formSubmit" type="submit" value="Save" />
       </form>
       <form onSubmit={this.handleSubmit}> 
+      <h2> Existing Employment Details </h2>
         <div>{entriesFormatted}</div>
         <button onClick= {this.previousPage} className="formSubmit">Previous</button>
-        <button onClick= {this.addEmploymentEntry} className="formSubmit">Add Additional Employment Entry</button>
+        <button onClick= {this.addEntry} className="formSubmit">Add Additional Employment Entry</button>
       </form>
     </Fragment>
     );
@@ -118,5 +126,6 @@ class Employment extends Component {
 
 export default Employment;
 
-// Next Steps - Save the being-edited company separately in State
-// When you press "Update", add that company to state
+// employment details does not save - need to save to props and pull from props
+// need to add edit button
+// need to add delete button
